@@ -1,0 +1,38 @@
+# utils.py
+import argparse
+import torch.nn as nn
+
+class qkv_transform(nn.Conv1d):
+    """Conv1d for qkv_transform"""
+    pass  # 保留原样，如果需要添加功能，可以在这里扩展
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ['true', '1']:
+        return True
+    elif v.lower() in ['false', '0']:
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+def count_params(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+class AverageMeter(object):
+    """Computes and stores the average and current value"""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
